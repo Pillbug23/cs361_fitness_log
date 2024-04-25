@@ -85,7 +85,7 @@
 
 /*Calorie Tracker*/
 .calorie-logo {
-  margin-bottom: 60px;
+  margin-bottom: 20px;
   font-size: 44px;
 }
 
@@ -109,6 +109,16 @@
 .horizontal-line {
   border-top: 1px solid #ccc; /* Set the border style, color, and width */
   margin: 25px 0; 
+}
+
+
+/*Calorie form*/
+.form-calorie {
+  background-color: #007bff;
+  padding: 25px;
+  color: #000000;
+  font-size: 20px;
+  border-radius: 4px;
 }
 
 /* All forms */
