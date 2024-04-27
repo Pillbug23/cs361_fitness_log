@@ -203,6 +203,17 @@ app.delete("/delete-exercises", (req, res) => {
     });
 });
 
+app.delete("/delete-weights", (req, res) => {
+    const sql = 'DELETE FROM Weights';
+    pool.query(sql, (error) => {
+        if (error) {
+            res.status(500).send('Error deleting entries')
+            return;
+        }
+        res.send('All entries deleted successfully');
+    });
+});
+
 /*
     LISTENER
 */

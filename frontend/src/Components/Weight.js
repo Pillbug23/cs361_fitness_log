@@ -18,12 +18,7 @@ function Weight() {
 
     const [weight, setWeight] = useState(0);
     const [goal, setGoal] = useState(false);
-
-    // Side effect for loading component after each render
-    // Data is loaded once on load 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const [previousValue, setPreviousValue] = useState(null);
 
     const fetchData = async () => {
         try {
@@ -35,7 +30,18 @@ function Weight() {
                     const formattedDate = obj[0].slice(0, 10); // Extract the first 10 characters
                     return [formattedDate, obj[1]];
                 })
-                setData2(prevData => [...prevData, ...formattedDate]); // Append fetched data to existing data
+
+                formattedDate.sort((a, b) => {
+                    // Convert the date strings to Date objects for comparison
+                    const dateA = new Date(a[0]);
+                    const dateB = new Date(b[0]);
+
+                    // Compare the dates
+                    return dateA - dateB;
+                });
+
+                setData2(prevData => [...prevData, ...formattedDate.slice(-1)]); // Append fetched data to existing data
+                console.log(data2)
             } else {
                 console.error('Error fetching data:', response.status);
             }
@@ -50,6 +56,8 @@ function Weight() {
         date: '',
         weight: ''
     });
+
+    const [previousFormData, setPreviousFormData] = useState(null); // State to store previous form data
 
     const marks = [
         {
@@ -86,10 +94,16 @@ function Weight() {
     };
 
     const [value, setValue] = useState(250); // Initial value for the slider
+    const handleUndo = () => {
+        setFormData(previousFormData)
+    };
+
 
     const handleSliderChange = (event, newValue) => {
         setValue(newValue)
     };
+
+
 
     // handleChange arrow function called everytime a field is filled out
     // Destructure e.target which has name,target
@@ -101,7 +115,6 @@ function Weight() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(weight)
         if (formData.weight == value) {
             setGoal(!goal)
         }
@@ -117,16 +130,30 @@ function Weight() {
             });
             if (response.ok) {
                 // Handle success
-                console.log('Weight added successfully');
+                setPreviousFormData(formData)
                 setFormData({
                     date: '',
                     weight: '',
                 })
+                fetchData()
             }
         } catch (error) {
             console.error('Could not add student', error);
         }
     };
+
+    function handleDelete() {
+        fetch('http://localhost:4283/delete-weights', {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.ok) {
+                    fetchData()
+                }
+            })
+
+    };
+
 
     return (
         <section>
@@ -148,6 +175,7 @@ function Weight() {
                                 id="slide"
                                 valueLabelDisplay="auto"
                                 aria-label="term slider"
+                                value={value}
                                 defaultValue={250}
                                 onChange={handleSliderChange}
                                 min={1}
@@ -155,11 +183,13 @@ function Weight() {
                                 marks={marks}
                                 color="secondary"
                             />
+                            <Button style={{ marginBottom: '10px' }} onClick={() => handleDelete()}> Delete All Entries</Button>
                             <h2>Goal Weight: {value}</h2>
                             {goal && (<><Alert variant={'success'}>
                                 You have successfully hit your goal weight!
                             </Alert>
                             </>)}
+                            <Button onClick={handleUndo}>Redo Entry </Button>
                         </Col>
                     </Row>
                     <Row>
