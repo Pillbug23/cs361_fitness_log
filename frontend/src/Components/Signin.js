@@ -111,6 +111,7 @@ function Signin() {
                             <Row>
                                 <Col md={9}>
                                     <Form onSubmit={handleSubmit}>
+                                        <p>Create a secure account saved to the backend to access your profile information</p>
                                         <Form.Group className="mb-3" controlId="formBasicEmail">
                                             <Form.Label>Email</Form.Label>
                                             <Form.Control type="email" placeholder="Email address" name="email" value={formData.email} onChange={handleChange} required/>
@@ -127,6 +128,7 @@ function Signin() {
                                         </Button>
                                     </Form>
                                     <div className="horizontal-line"></div>
+                                    <p>Sign in through Google for a faster and seamless frontend login. There is no need to create an account to do this.</p>
                                     <Button onClick={login}>Sign in with Google 🚀 </Button>
                                 </Col>
                             </Row></>

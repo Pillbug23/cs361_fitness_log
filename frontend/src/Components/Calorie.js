@@ -274,7 +274,7 @@ function Calorie() {
                     <Row>
                         <Col md={12} >
                             <h1>Change Goal</h1>
-                            <p>Adjust the slider below to set your own calorie goals!</p>
+                            <p>First adjust the slider below to set your own calorie goals!</p>
                             <Slider
                                 name="slide"
                                 id="slide"
@@ -293,7 +293,7 @@ function Calorie() {
                     <Row>
                         <Col md={6}>
                             <h1 className="calorie-logo">Add Food Entry <MdFastfood /></h1>
-                            <p>Add a food entry by entering the name of the food, and its
+                            <p>Then add a food entry by entering the name of the food, and its
                                 calorie count into the below input fields. Submitting the Food
                                 will allow you to see what calories are left in the above progress bar.
                             </p>
@@ -338,7 +338,7 @@ function Calorie() {
                     <Row>
                         <Col md={6}>
                             <h1 className="calorie-logo">Add Exercise Entry <FaFire /></h1>
-                            <p>Add a exercise entry by entering the exercise name, and its
+                            <p>Finally add a exercise entry by entering the exercise name, and its
                                 calorie count burned into the below input fields. Submitting the Exercise
                                 will allow you to see what calories you burned in the above progress bar.
                             </p>
