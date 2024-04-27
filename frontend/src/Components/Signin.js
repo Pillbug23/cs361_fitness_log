@@ -15,7 +15,7 @@ import axios from 'axios';
 function Signin() {
     const [user, setUser] = useState([]);
     const [profile, setProfile] = useState(null);
-
+    const [backend, setBackend] = useState(false)
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -31,6 +31,13 @@ function Signin() {
         googleLogout();
         setProfile(null);
     };
+    
+    // Google log out function
+    const logOut2 = () => {
+        setProfile(null);
+        setBackend(false)
+    };
+
 
     useEffect(
         () => {
@@ -54,9 +61,9 @@ function Signin() {
     // handleChange arrow function called everytime a field is filled out
     // Destructure e.target which has name,target
     // update state with the previous formData object and new attribute:value pair
-    const handleChange =(e) => {
-        const {name, value} = e.target
-        setFormData({...formData,[name]: value});
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setFormData({ ...formData, [name]: value });
     }
 
 
@@ -79,9 +86,10 @@ function Signin() {
                 console.log(data)
                 setFormData({
                     email: '',
-                    password: ''                   
+                    password: ''
                 })
                 setProfile(data)
+                setBackend(true)
             }
         } catch (error) {
             console.error('Could not find login', error);
@@ -92,21 +100,46 @@ function Signin() {
         <section>
             <Container fluid className="basic-info" id="signup">
                 <Container className="content">
-                    {profile ? (<Row>
-                        <Col>
-                            <Card style={{ width: '24rem' }}>
-                                <Card.Img variant="top" src={profile.picture}/>
-                                <Card.Body>
-                                    <Card.Title>{profile[0].name}</Card.Title>
-                                    <Card.Title>{profile[0].email}</Card.Title>
-                                    <Card.Text>
-                                        Feel free to change your profile description
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                            <Button onClick={logOut} style={{marginTop: "20px"}}>Log out</Button>
-                        </Col>
-                    </Row>) : (
+                    {
+                        profile && !backend && (
+                            <Row>
+                                <Col>
+                                    <Card style={{ width: '24rem' }}>
+                                        <Card.Img variant="top" src={profile.picture} />
+                                        <Card.Body>
+                                            <Card.Title>{profile.name}</Card.Title>
+                                            <Card.Title>{profile.email}</Card.Title>
+                                            <Card.Text>
+                                                Feel free to change your profile description
+                                            </Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                    <Button onClick={logOut} style={{ marginTop: "20px" }}>Log out</Button>
+                                </Col>
+                            </Row>
+                        )
+                    }
+
+                    {profile && backend && (
+                        <Row>
+                            <Col>
+                                <Card style={{ width: '24rem' }}>
+                                    <Card.Img variant="top" src={profile.picture} />
+                                    <Card.Body>
+                                        <Card.Title>{profile[0].name}</Card.Title>
+                                        <Card.Title>{profile[0].email}</Card.Title>
+                                        <Card.Text>
+                                            Feel free to change your profile description
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                                <Button onClick={logOut2} style={{ marginTop: "20px" }}>Log out</Button>
+                            </Col>
+                        </Row>
+                    )}
+
+
+                    {!profile && (
                         <><h1 className="signup-logo">Sign In</h1>
                             <Row>
                                 <Col md={9}>
@@ -114,13 +147,12 @@ function Signin() {
                                         <p>Create a secure account saved to the backend to access your profile information</p>
                                         <Form.Group className="mb-3" controlId="formBasicEmail">
                                             <Form.Label>Email</Form.Label>
-                                            <Form.Control type="email" placeholder="Email address" name="email" value={formData.email} onChange={handleChange} required/>
+                                            <Form.Control type="email" placeholder="Email address" name="email" value={formData.email} onChange={handleChange} required />
                                         </Form.Group>
-
 
                                         <Form.Group className="mb-3" controlId="formBasicPassword">
                                             <Form.Label>Password</Form.Label>
-                                            <Form.Control type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} required/>
+                                            <Form.Control type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} required />
                                         </Form.Group>
 
                                         <Button variant="primary" type="submit">
@@ -136,7 +168,7 @@ function Signin() {
                     )}
                 </Container>
             </Container>
-        </section>
+        </section >
     );
 }
 
