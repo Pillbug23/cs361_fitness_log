@@ -22,7 +22,7 @@ function Weight() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:4283/weight');
+            const response = await fetch('http://localhost:6662/weight');
             if (response.ok) {
                 const data = await response.json();
                 const formattedData = data.map(obj => Object.values(obj)); // Convert fetched data to array format
@@ -50,12 +50,90 @@ function Weight() {
         }
     };
 
+    const fetchData2 = async () => {
+        try {
+            const response = await fetch('http://localhost:6662/weight');
+            if (response.ok) {
+                const data = await response.json();
+                const formattedData = data.map(obj => Object.values(obj)); // Convert fetched data to array format
+                const formattedDate = formattedData.map(obj => {
+                    const formattedDate = obj[0].slice(0, 10); // Extract the first 10 characters
+                    return [formattedDate, obj[1]];
+                })
+                
+                formattedDate.sort((a, b) => {
+                    // Convert the date strings to Date objects for comparison
+                    const dateA = new Date(a[0]);
+                    const dateB = new Date(b[0]);
+
+                    // Compare the dates
+                    return dateA - dateB;
+                });
+                console.log(formattedDate)
+                setData2(prevData => [...prevData, ...formattedDate]); // Append fetched data to existing data
+            } else {
+                console.error('Error fetching data:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    // Side effect for loading component after each render
+    // Data is loaded once on load 
+    useEffect(() => {
+        fetchData2();
+    }, []);
+
     // Form data which is a useState object
     // Note some fields are set to the default values if not selected
     const [formData, setFormData] = useState({
         date: '',
         weight: ''
     });
+
+    /*
+    logic to obtain the 30 most recently entered weight and save data to pastWeight state
+    */
+    const [pastWeight, setPastWeight] = useState([]);
+    useEffect(() => {
+        fetchWeight();
+    }, []);
+
+    const fetchWeight = async () => {
+        try {
+            const response = await fetch('http://localhost:6662/past-weight');
+            if (response.ok) {
+                const data = await response.json();
+                setPastWeight(data);
+            } else {
+                console.error('Error fetching data:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    /*
+    logic to get the average of the 30 most recently entered weight and save data to pastWeightAvg state
+    */
+    const [pastWeightAvg, setPastWeightAvg] = useState([]);
+    useEffect(() => {
+        fetchWeightAvg();
+    }, []);
+    const fetchWeightAvg = async () => {
+        try {
+            const response = await fetch('http://localhost:6662/past-weight-avg');
+            if (response.ok) {
+                const data = await response.json();
+                setPastWeightAvg(data);
+            } else {
+                console.error('Error fetching data:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
 
     const [previousFormData, setPreviousFormData] = useState(null); // State to store previous form data
 
@@ -121,7 +199,7 @@ function Weight() {
         // Convert weight to number
         const weightNumber = parseFloat(weight);
         try {
-            const response = await fetch('http://localhost:4283/weight', {
+            const response = await fetch('http://localhost:6662/weight', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -143,7 +221,7 @@ function Weight() {
     };
 
     function handleDelete() {
-        fetch('http://localhost:4283/delete-weights', {
+        fetch('http://localhost:6662/delete-weights', {
             method: 'DELETE'
         })
             .then(response => {
@@ -210,6 +288,43 @@ function Weight() {
                                 </Button>
                             </Form>
                         </Col>
+                    </Row>
+                    <Row>
+                        <h2 style={{paddingTop: "20px"}}>
+                            Weights Entered Within Past 30 Days
+                        </h2>
+                        <ul>
+                            {pastWeight.map((value, index) => 
+                            <li style={{color: "red", width: "33%", float: "left", textAlign: "center", listStyleType: "none", border: "1px dotted black"}} key={index}>
+                                {value.Weight} lbs
+                            </li>)}
+                        </ul>
+                    </Row>
+                    <Row>
+                        <h2 style={{paddingTop: "20px"}}>
+                            Average of Entered Weights Within Past 30 Days
+                        </h2>
+                            {pastWeightAvg.map((value, index) => 
+                            <p style={{color: "red", textAlign: "center", fontSize: "150%", border: "1px dotted black"}} key={index}>
+                                {value.averageWeight} lbs
+                            </p>)}
+                    </Row>
+                    <Row>
+                        <h2 style={{paddingTop: "20px"}}>
+                            You Can Do It!
+                        </h2>
+                            {pastWeightAvg.map((value, index) => 
+                            <p style={{color: "red", textAlign: "center", fontSize: "100%", border: "1px dotted black"}} key={index}>
+                                Your average weight within the past 30 days has been {value.averageWeight} lbs!
+                                That is <u>ABSOLUTELY</u> amazing. 
+                                <br></br>
+                                <br></br>
+                                No matter how difficult the journey is, keep up the hard work.
+                                Remember, safe daily calorie deficit and an increase but consistent physical activity do work for most.
+                                <br></br>
+                                <br></br>
+                                It will absolutely <em>pay off</em>!
+                            </p>)}
                     </Row>
                 </Container>
             </Container>

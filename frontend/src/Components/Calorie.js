@@ -13,6 +13,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Scrollspy from 'react-scrollspy'
 import Slider, { SliderThumb } from '@mui/material/Slider';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 import { FaFlag } from "react-icons/fa";
 import { IoFastFood } from "react-icons/io5";
@@ -22,10 +23,16 @@ import { MdFastfood } from "react-icons/md";
 function Calorie() {
     const [goal, setGoal] = useState(2000)
     const [food, setFood] = useState(0)
+    const [foodName, setFoodName] = useState('');
+    const [exerciseName, setExerciseName] = useState('');
+    const [searchFood, setSearchFood] = useState([]);
+    const [searchExercise, setSearchExercise] = useState([]);
     const [exercise, setExercise] = useState(0)
     const [exerciseData, setExerciseData] = useState([])
     const final = food - exercise;
     const [calorieData, setCalorieData] = useState([])
+
+
     // Form data which is a useState object
     // Note some fields are set to the default values if not selected
     const [formData, setFormData] = useState({
@@ -87,7 +94,7 @@ function Calorie() {
     };
 
     useEffect(() => {
-        fetch('http://localhost:4283/calorie')
+        fetch('http://localhost:6662/calorie')
             .then(response => response.json())
             .then(data => {
                 setCalorieData(data)
@@ -98,7 +105,7 @@ function Calorie() {
     }, [])
 
     useEffect(() => {
-        fetch('http://localhost:4283/exercise')
+        fetch('http://localhost:6662/exercise')
             .then(response => response.json())
             .then(data => {
                 setExerciseData(data)
@@ -128,18 +135,16 @@ function Calorie() {
         if (calorieData.length == 0) {
             return
         }
-        calorieData.map((item) => {
-            setFood(food + item.calorie)
-        })
+        const total = calorieData.reduce((sum, item) => sum + item.calorie, 0);
+        setFood(total);
     }
 
     const totalExercises = (exerciseData) => {
         if (exerciseData.length == 0) {
             return
         }
-        exerciseData.map((item) => {
-            setExercise(exercise + item.burned)
-        })
+        const total = exerciseData.reduce((sum, item) => sum + item.burned, 0);
+        setExercise(total);
     }
 
     const handleChange = (e) => {
@@ -152,11 +157,19 @@ function Calorie() {
         setFormData2({ ...formData2, [name]: value });
     };
 
+    const handleFoodChange = (e) => {
+        setFoodName(e.target.value)
+    };
+
+    const handleExerciseChange = (e) => {
+        setExerciseName(e.target.value)
+    };
+
     // On submit prevent webpage reload and check conditions
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:4283/calorie', {
+            const response = await fetch('http://localhost:6662/calorie', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -168,7 +181,7 @@ function Calorie() {
                     name: '',
                     calorie: ''
                 })
-                fetch('http://localhost:4283/calorie')
+                fetch('http://localhost:6662/calorie')
                     .then(response => response.json())
                     .then(data => {
                         setCalorieData(data)
@@ -183,10 +196,48 @@ function Calorie() {
     };
 
     // On submit prevent webpage reload and check conditions
+    const fetchFood = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:6662/calorie/search?name=${foodName}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json()
+                setSearchFood(data)
+            }
+        } catch (error) {
+            console.error('Could not add login', error);
+        }
+    };
+
+    // On submit prevent webpage reload and check conditions
+    const fetchExercise = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:6662/exercise/search?name=${exerciseName}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json()
+                setSearchExercise(data)
+            }
+        } catch (error) {
+            console.error('Could not add login', error);
+        }
+    };
+
+    // On submit prevent webpage reload and check conditions
     const handleSubmit2 = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:4283/exercise', {
+            const response = await fetch('http://localhost:6662/exercise', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -198,7 +249,7 @@ function Calorie() {
                     name: '',
                     burned: ''
                 })
-                fetch('http://localhost:4283/exercise')
+                fetch('http://localhost:6662/exercise')
                     .then(response => response.json())
                     .then(data => {
                         setExerciseData(data)
@@ -213,12 +264,12 @@ function Calorie() {
     };
 
     function handleDelete() {
-        fetch('http://localhost:4283/delete-calories', {
+        fetch('http://localhost:6662/delete-calories', {
             method: 'DELETE'
         })
             .then(response => {
                 if (response.ok) {
-                    fetch('http://localhost:4283/calorie')
+                    fetch('http://localhost:6662/calorie')
                         .then(response => response.json())
                         .then(data => {
                             setCalorieData(data)
@@ -232,12 +283,12 @@ function Calorie() {
     };
 
     function handleDelete2() {
-        fetch('http://localhost:4283/delete-exercises', {
+        fetch('http://localhost:6662/delete-exercises', {
             method: 'DELETE'
         })
             .then(response => {
                 if (response.ok) {
-                    fetch('http://localhost:4283/exercise')
+                    fetch('http://localhost:6662/exercise')
                         .then(response => response.json())
                         .then(data => {
                             setExerciseData(data)
@@ -249,6 +300,35 @@ function Calorie() {
             })
 
     };
+
+    const sortAlphabetically = (data, updateData) => {
+        const sortedArray = [...data].sort((a, b) => {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+            return 0;
+        });
+        updateData(sortedArray)
+    };
+
+    const filterByMaxCalories = (data, updateData) => {
+        const filteredArray = [...data].sort((a, b) => b.calorie - a.calorie);
+        updateData(filteredArray);
+    };
+
+    const filterByMinCalories = (data, updateData) => {
+        const filteredArray = [...data].sort((a, b) => a.calorie - b.calorie);
+        updateData(filteredArray);
+    }
+
+    const filterByMaxCalories2 = (data, updateData) => {
+        const filteredArray = [...data].sort((a, b) => b.burned - a.burned);
+        updateData(filteredArray);
+    };
+
+    const filterByMinCalories2 = (data, updateData) => {
+        const filteredArray = [...data].sort((a, b) => a.burned - b.burned);
+        updateData(filteredArray);
+    }
 
     return (
         <section>
@@ -318,8 +398,29 @@ function Calorie() {
                             <h1 className="calorie-logo">View Food Entries <FaFileAlt /></h1>
                             <p>Here you are able to view all food entries currently added.
                             </p>
+                            <InputGroup className="mb-3">
+                                <InputGroup.Text id="basic-addon1">🔍</InputGroup.Text>
+                                <Form.Control
+                                    placeholder="Enter food name"
+                                    aria-label="food"
+                                    aria-describedby="basic-addon1"
+                                    onChange={handleFoodChange}
+                                    value={foodName}
+                                />
+                                <Button onClick={fetchFood}>Search</Button>
+                            </InputGroup>
+                            {searchFood.map((item, index) => {
+                                return (
+                                    <Card key={index} style={{ width: '19rem', margin: '2px' }} >
+                                        <Card.Body>
+                                            <Card.Title>{item.name}</Card.Title>
+                                            <Card.Subtitle>Calories: {item.calorie}</Card.Subtitle>
+                                        </Card.Body>
+                                    </Card>)
+                            })}
                             <div className="horizontal-line"></div>
                             <Button style={{ marginBottom: '10px' }} onClick={() => handleDelete()}> Delete All Entries</Button>
+
                             <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
                                 {calorieData.map((item, index) => {
                                     return (
@@ -330,6 +431,9 @@ function Calorie() {
                                             </Card.Body>
                                         </Card>)
                                 })}
+                                <Button style={{ margin: '10px' }} onClick={() => sortAlphabetically(calorieData, setCalorieData)}> Sort Alphabetically</Button>
+                                <Button style={{ margin: '10px' }} onClick={() => filterByMaxCalories(calorieData, setCalorieData)}> Sort By Max Calories</Button>
+                                <Button style={{ margin: '10px' }} onClick={() => filterByMinCalories(calorieData, setCalorieData)}> Sort By Min Calories</Button>
                             </div>
                         </Col>
                     </Row>
@@ -360,9 +464,29 @@ function Calorie() {
                             </Form>
                         </Col>
                         <Col md={6} >
-                            <h1 className="calorie-logo">View ExerciseEntries <FaFileAlt /></h1>
+                            <h1 className="calorie-logo">View Exercise Entries <FaFileAlt /></h1>
                             <p>Here you are able to view all exercise entries currently added.
                             </p>
+                            <InputGroup className="mb-3">
+                                <InputGroup.Text id="basic-addon1">🔍</InputGroup.Text>
+                                <Form.Control
+                                    placeholder="Enter exercise name"
+                                    aria-label="exercise"
+                                    aria-describedby="basic-addon1"
+                                    onChange={handleExerciseChange}
+                                    value={exerciseName}
+                                />
+                                <Button onClick={fetchExercise}>Search</Button>
+                            </InputGroup>
+                            {searchExercise.map((item, index) => {
+                                return (
+                                    <Card key={index} style={{ width: '19rem', margin: '2px' }} >
+                                        <Card.Body>
+                                            <Card.Title>{item.name}</Card.Title>
+                                            <Card.Subtitle>Calories: {item.burned}</Card.Subtitle>
+                                        </Card.Body>
+                                    </Card>)
+                            })}
                             <div className="horizontal-line"></div>
                             <Button style={{ marginBottom: '10px' }} onClick={() => handleDelete2()}> Delete All Entries</Button>
                             <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
@@ -375,6 +499,9 @@ function Calorie() {
                                             </Card.Body>
                                         </Card>)
                                 })}
+                                <Button style={{ margin: '10px' }} onClick={() => sortAlphabetically(exerciseData, setExerciseData)}> Sort Alphabetically</Button>
+                                <Button style={{ margin: '10px' }} onClick={() => filterByMaxCalories2(exerciseData, setExerciseData)}> Sort By Max Calories</Button>
+                                <Button style={{ margin: '10px' }} onClick={() => filterByMinCalories2(exerciseData, setExerciseData)}> Sort By Min Calories</Button>
                             </div>
                         </Col>
                     </Row>

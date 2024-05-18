@@ -13,7 +13,7 @@ const pool = mysql.createPool({
 
 var express = require('express');   // We are using the express library for the web server
 var app = express();            // We need to instantiate an express object to interact with the server in our code
-PORT = 4283;                 // Set a port number at the top so it's easy to change in the future
+PORT = 6662;                 // Set a port number at the top so it's easy to change in the future
 
 // Handlebars
 const { engine } = require('express-handlebars');
@@ -92,7 +92,33 @@ app.get('/calorie', (req, res) => {
     });
 });
 
-// Gets calorie data
+app.get('/calorie', (req, res) => {
+    const query = 'SELECT * FROM Calories';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error fetching data');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/calorie/search', (req, res) => {
+    const foodName = req.query.name;
+
+    const query = 'SELECT * FROM Calories WHERE name = ?';
+    pool.query(query, [foodName], (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error fetching data');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Gets exercise data
 app.get('/exercise', (req, res) => {
     const query = 'SELECT * FROM Exercises';
     pool.query(query, (err, results) => {
@@ -104,6 +130,49 @@ app.get('/exercise', (req, res) => {
         res.json(results);
     });
 });
+
+app.get('/exercise/search', (req, res) => {
+    const exerciseName = req.query.name;
+
+    console.log(exerciseName)
+    
+    const query = 'SELECT * FROM Exercises WHERE name = ?';
+    pool.query(query, [exerciseName], (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error fetching data');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// GET the 30 most entered weights
+app.get('/past-weight', (req, res) => {
+    const query = 'SELECT Weight FROM Weights ORDER BY Weight DESC LIMIT 30';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error fetching data');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// GET the average of the 30 most entered weights
+app.get('/past-weight-avg', (req, res) => {
+    const query = 'SELECT AVG(Weight) as averageWeight FROM (SELECT * FROM Weights ORDER BY date DESC Limit 30) AS AVERAGE';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error fetching data');
+            return;
+        }
+        res.json(results);
+    });
+});
+
 
 
 /*
