@@ -14,11 +14,17 @@ import 'react-circular-progressbar/dist/styles.css';
 import Scrollspy from 'react-scrollspy'
 import Slider, { SliderThumb } from '@mui/material/Slider';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Modal from 'react-bootstrap/Modal'
 
 import { FaFlag } from "react-icons/fa";
 import { IoFastFood } from "react-icons/io5";
 import { FaFire } from "react-icons/fa";
 import { MdFastfood } from "react-icons/md";
+import { TbMeat } from "react-icons/tb";
+import { CiWheat } from "react-icons/ci";
+import { LuMilk } from "react-icons/lu";
+import { FaRunning } from "react-icons/fa";
+import { IoFootsteps } from "react-icons/io5";
 
 function Calorie() {
     const [goal, setGoal] = useState(2000)
@@ -32,12 +38,24 @@ function Calorie() {
     const final = food - exercise;
     const [calorieData, setCalorieData] = useState([])
 
+    const [protein, setProtein] = useState(0)
+    const [fiber, setFiber] = useState(0)
+    const [fat, setFat] = useState(0)
+
+    const [show, setShow] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const [distance, setDistance] = useState(0)
+    const [steps, setSteps] = useState(0)
 
     // Form data which is a useState object
     // Note some fields are set to the default values if not selected
     const [formData, setFormData] = useState({
         name: '',
-        calorie: ''
+        calorie: '',
+        protein: '',
+        fiber: '',
+        fat: ''
     });
 
     const [formData2, setFormData2] = useState({
@@ -93,19 +111,22 @@ function Calorie() {
         setGoal(newValue)
     };
 
+    const handleClose = () => setShow(false);
+
     useEffect(() => {
-        fetch('http://localhost:6662/calorie')
+        fetch('http://localhost:9825/calorie')
             .then(response => response.json())
             .then(data => {
                 setCalorieData(data)
                 totalCalories(data)
+                
             })
             .catch(error => console.error('Error fetching data:', error));
 
-    }, [])
+    }, [calorieData])
 
     useEffect(() => {
-        fetch('http://localhost:6662/exercise')
+        fetch('http://localhost:9825/exercise')
             .then(response => response.json())
             .then(data => {
                 setExerciseData(data)
@@ -113,7 +134,15 @@ function Calorie() {
             })
             .catch(error => console.error('Error fetching data:', error));
 
-    }, [])
+    }, [exerciseData])  
+
+    useEffect(() => {
+        setDistance(exercise / 100);
+      }, [exercise]);
+      
+      useEffect(() => {
+        setSteps((distance * 5280) / 2.5);
+      }, [distance]);
 
     const calculateCalories = (calorieData) => {
         if (calorieData.length == 0) {
@@ -136,7 +165,13 @@ function Calorie() {
             return
         }
         const total = calorieData.reduce((sum, item) => sum + item.calorie, 0);
+        const total_protein = calorieData.reduce((sum, item) => sum + item.protein, 0);
+        const total_fiber = calorieData.reduce((sum, item) => sum + item.fiber, 0);
+        const total_fat = calorieData.reduce((sum, item) => sum + item.fat, 0);
         setFood(total);
+        setProtein(total_protein);
+        setFiber(total_fiber);
+        setFat(total_fat);
     }
 
     const totalExercises = (exerciseData) => {
@@ -165,11 +200,16 @@ function Calorie() {
         setExerciseName(e.target.value)
     };
 
+    const openModal = (item) => {
+        setSelectedItem(item);
+        setShow(true)
+    }
+
     // On submit prevent webpage reload and check conditions
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:6662/calorie', {
+            const response = await fetch('http://localhost:9825/calorie', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -179,16 +219,11 @@ function Calorie() {
             if (response.ok) {
                 setFormData({
                     name: '',
-                    calorie: ''
+                    calorie: '',
+                    protein: '',
+                    fiber: '',
+                    fat: ''
                 })
-                fetch('http://localhost:6662/calorie')
-                    .then(response => response.json())
-                    .then(data => {
-                        setCalorieData(data)
-                        calculateCalories(data)
-                    })
-                    .catch(error => console.error('Error fetching data:', error));
-
             }
         } catch (error) {
             console.error('Could not add login', error);
@@ -199,7 +234,7 @@ function Calorie() {
     const fetchFood = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:6662/calorie/search?name=${foodName}`, {
+            const response = await fetch(`http://localhost:9825/calorie/search?name=${foodName}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -218,7 +253,7 @@ function Calorie() {
     const fetchExercise = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:6662/exercise/search?name=${exerciseName}`, {
+            const response = await fetch(`http://localhost:9825/exercise/search?name=${exerciseName}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -237,7 +272,7 @@ function Calorie() {
     const handleSubmit2 = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:6662/exercise', {
+            const response = await fetch('http://localhost:9825/exercise', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -249,7 +284,7 @@ function Calorie() {
                     name: '',
                     burned: ''
                 })
-                fetch('http://localhost:6662/exercise')
+                fetch('http://localhost:9825/exercise')
                     .then(response => response.json())
                     .then(data => {
                         setExerciseData(data)
@@ -264,12 +299,12 @@ function Calorie() {
     };
 
     function handleDelete() {
-        fetch('http://localhost:6662/delete-calories', {
+        fetch('http://localhost:9825/delete-calories', {
             method: 'DELETE'
         })
             .then(response => {
                 if (response.ok) {
-                    fetch('http://localhost:6662/calorie')
+                    fetch('http://localhost:9825/calorie')
                         .then(response => response.json())
                         .then(data => {
                             setCalorieData(data)
@@ -283,12 +318,12 @@ function Calorie() {
     };
 
     function handleDelete2() {
-        fetch('http://localhost:6662/delete-exercises', {
+        fetch('http://localhost:9825/delete-exercises', {
             method: 'DELETE'
         })
             .then(response => {
                 if (response.ok) {
-                    fetch('http://localhost:6662/exercise')
+                    fetch('http://localhost:9825/exercise')
                         .then(response => response.json())
                         .then(data => {
                             setExerciseData(data)
@@ -335,17 +370,26 @@ function Calorie() {
             <Container fluid className="basic-info" id="signup">
                 <Container className="content">
                     <Row>
-                        <Col md={7} >
+                        <Col md={4} >
                             <h1 className="calorie-logo">Calculate Calories</h1>
                             <div className="progress-bar">
                                 <CircularProgressbar maxValue={goal} value={final} text={`${final}`} />
                             </div>
                         </Col>
-                        <Col md={5}>
+                        <Col md={4}>
                             <Container className="goal-format">
                                 <FaFlag style={{ color: "#CCCCCC" }} /> <span>Base Goal: {goal}</span>
                                 <IoFastFood style={{ color: "#1877F2", marginTop: "25px" }} /> <span>Food: {food}</span>
                                 <FaFire style={{ color: "#FF4500", marginTop: "25px" }} /> <span>Exercise: {exercise}</span>
+                                <TbMeat style={{ color: "#B22222", marginTop: "25px" }} /> <span>Protein: {protein}g</span>
+                                <CiWheat style={{ color: "#F4A460", marginTop: "25px" }} /> <span>Fiber: {fiber}g</span>
+                                <LuMilk style={{ color: "#F0EAD6", marginTop: "25px" }} /> <span>Fat: {fat}g</span>
+                            </Container>
+                        </Col>
+                        <Col md={4}>
+                            <Container className="goal-format">
+                                <FaRunning style={{ marginTop: "25px" }} /> <span>Distance Travelled: {distance}mi</span>
+                                <IoFootsteps style={{ marginTop: "25px" }} /> <span>Steps Taken: {steps}</span>
                             </Container>
                         </Col>
                     </Row>
@@ -389,6 +433,21 @@ function Calorie() {
                                     <Form.Label>Calorie Count</Form.Label>
                                     <Form.Control type="number" placeholder="Num. Calories of item" name="calorie" value={formData.calorie} onChange={handleChange} required />
                                 </Form.Group>
+
+                                <Form.Group className="mb-3" controlId="formBasicPassword">
+                                    <Form.Label>Protein (g)</Form.Label>
+                                    <Form.Control type="number" placeholder="Enter Protein in Grams" name="protein" value={formData.protein} onChange={handleChange} required />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3" controlId="formBasicPassword">
+                                    <Form.Label>Fiber (g)</Form.Label>
+                                    <Form.Control type="number" placeholder="Enter Fiber in Grams" name="fiber" value={formData.fiber} onChange={handleChange} required />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3" controlId="formBasicPassword">
+                                    <Form.Label>Fat (g)</Form.Label>
+                                    <Form.Control type="number" placeholder="Enter Fat in Grams" name="fat" value={formData.fat} onChange={handleChange} required />
+                                </Form.Group>
                                 <Button variant="dark" type="submit">
                                     Submit
                                 </Button>
@@ -411,7 +470,7 @@ function Calorie() {
                             </InputGroup>
                             {searchFood.map((item, index) => {
                                 return (
-                                    <Card key={index} style={{ width: '19rem', margin: '2px' }} >
+                                    <Card className="calorie-style" key={index} style={{ width: '19rem', margin: '2px' }} onClick={() => openModal(item)}>
                                         <Card.Body>
                                             <Card.Title>{item.name}</Card.Title>
                                             <Card.Subtitle>Calories: {item.calorie}</Card.Subtitle>
@@ -424,7 +483,7 @@ function Calorie() {
                             <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
                                 {calorieData.map((item, index) => {
                                     return (
-                                        <Card key={index} style={{ width: '19rem', margin: '2px' }} >
+                                        <Card className="calorie-style" key={index} style={{ width: '19rem', margin: '2px' }} onClick={() => openModal(item)}>
                                             <Card.Body>
                                                 <Card.Title>{item.name}</Card.Title>
                                                 <Card.Subtitle>Calories: {item.calorie}</Card.Subtitle>
@@ -435,6 +494,25 @@ function Calorie() {
                                 <Button style={{ margin: '10px' }} onClick={() => filterByMaxCalories(calorieData, setCalorieData)}> Sort By Max Calories</Button>
                                 <Button style={{ margin: '10px' }} onClick={() => filterByMinCalories(calorieData, setCalorieData)}> Sort By Min Calories</Button>
                             </div>
+
+                            {selectedItem && (
+                                <Modal show={show} onHide={handleClose}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>{selectedItem.name}</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <p>Calories: {selectedItem.calorie}</p>
+                                        <p>Protein: {selectedItem.protein}</p>
+                                        <p>Fiber: {selectedItem.fiber}</p>
+                                        <p>Fat: {selectedItem.fat}</p>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleClose}>
+                                            Close
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                            )}
                         </Col>
                     </Row>
                 </Container>

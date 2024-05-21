@@ -32,7 +32,7 @@ function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:6662/login', {
+            const response = await fetch('http://localhost:9825/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

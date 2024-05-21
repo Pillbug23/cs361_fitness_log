@@ -22,7 +22,7 @@ function Weight() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:6662/weight');
+            const response = await fetch('http://localhost:9825/weight');
             if (response.ok) {
                 const data = await response.json();
                 const formattedData = data.map(obj => Object.values(obj)); // Convert fetched data to array format
@@ -52,7 +52,7 @@ function Weight() {
 
     const fetchData2 = async () => {
         try {
-            const response = await fetch('http://localhost:6662/weight');
+            const response = await fetch('http://localhost:9825/weight');
             if (response.ok) {
                 const data = await response.json();
                 const formattedData = data.map(obj => Object.values(obj)); // Convert fetched data to array format
@@ -102,7 +102,7 @@ function Weight() {
 
     const fetchWeight = async () => {
         try {
-            const response = await fetch('http://localhost:6662/past-weight');
+            const response = await fetch('http://localhost:9825/past-weight');
             if (response.ok) {
                 const data = await response.json();
                 setPastWeight(data);
@@ -123,7 +123,7 @@ function Weight() {
     }, []);
     const fetchWeightAvg = async () => {
         try {
-            const response = await fetch('http://localhost:6662/past-weight-avg');
+            const response = await fetch('http://localhost:9825/past-weight-avg');
             if (response.ok) {
                 const data = await response.json();
                 setPastWeightAvg(data);
@@ -199,7 +199,7 @@ function Weight() {
         // Convert weight to number
         const weightNumber = parseFloat(weight);
         try {
-            const response = await fetch('http://localhost:6662/weight', {
+            const response = await fetch('http://localhost:9825/weight', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -221,7 +221,7 @@ function Weight() {
     };
 
     function handleDelete() {
-        fetch('http://localhost:6662/delete-weights', {
+        fetch('http://localhost:9825/delete-weights', {
             method: 'DELETE'
         })
             .then(response => {

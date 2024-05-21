@@ -91,8 +91,8 @@
 
 .progress-bar {
   color: white;
-  width: 300px;
-  height: 300px;
+  width: 400px;
+  height: 400px;
 }
 
 .goal-format {
@@ -119,6 +119,15 @@
   color: #000000;
   font-size: 20px;
   border-radius: 4px;
+}
+
+.calorie-style {
+  cursor: 'pointer';
+  transition: 'background-color 0.3s';
+}
+
+.calorie-style:hover {
+  background-color: #cac8c8; /* Light shade color */
 }
 
 /* All forms */
