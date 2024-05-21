@@ -123,7 +123,7 @@ function Calorie() {
             })
             .catch(error => console.error('Error fetching data:', error));
 
-    }, [calorieData])
+    }, [])
 
     useEffect(() => {
         fetch('http://localhost:9825/exercise')
@@ -134,7 +134,7 @@ function Calorie() {
             })
             .catch(error => console.error('Error fetching data:', error));
 
-    }, [exerciseData])  
+    }, [])  
 
     useEffect(() => {
         setDistance(exercise / 100);
@@ -263,6 +263,12 @@ function Calorie() {
                 const data = await response.json()
                 setSearchExercise(data)
             }
+            fetch('http://localhost:9825/calorie')
+                    .then(response => response.json())
+                    .then(data => {
+                        setCalorieData(data)
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
         } catch (error) {
             console.error('Could not add login', error);
         }

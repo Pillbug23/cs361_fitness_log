@@ -59,6 +59,11 @@ function Navigation() {
                 Sign In
               </Nav.Link>
         </Nav.Item>
+        <Nav.Item >
+              <Nav.Link as={Link} to="/water" >
+                Water Intake
+              </Nav.Link>
+        </Nav.Item>
         </Navbar.Collapse>
       </Container>
     </Navbar>

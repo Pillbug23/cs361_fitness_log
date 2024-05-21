@@ -9,6 +9,7 @@ import SignUp from './Components/SignUp.js';
 import Calorie from './Components/Calorie.js';
 import Weight from './Components/Weight.js';
 import Signin from './Components/Signin.js';
+import Water from './Components/Water.js';
 
 
 /*Import bootstrap styles */
@@ -25,6 +26,7 @@ function App() {
           <Route path = "/calorie" element= {<Calorie />}/>
           <Route path = "/weight" element= {<Weight />}/>
           <Route path = "/signin" element= {<Signin />}/>
+          <Route path = "/water" element= {<Water />}/>
         </Routes>
         </Router>
     </div>
