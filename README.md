@@ -11,21 +11,23 @@ Water Intake Monitoring: Track daily water consumption to ensure adequate hydrat
 Weight Tracking: Chart and visualize weight changes to monitor progress towards fitness goals.<br>
 User Authentication: Secure user authentication using Auth0.<br>
 Data Visualization: Integrated Google Charts to provide visual insights into calorie and weight trends.<br>
-Microservices Architecture: The application is designed using microservices to ensure scalability and ease of maintenance.<br>
 
-Frontend: React, Bootstrap
-Backend: Node.js, Express
-Database: MySQL
-Authentication: Auth0
-Data Visualization: Google Charts
-Setup and Installation
+Frontend: React, Bootstrap<br>
+Backend: Node.js, Express<br>
+Database: MySQL<br>
+Authentication: Auth0<br>
+Data Visualization: Google Charts<br>
+
+# Setup and Installation
+
 Clone the Repository:
 
-bash
-Copy code
-git clone https://github.com/Pillbug23/cs361_fitness_tracker.git
-cd cs361_fitness_tracker
-Install Dependencies:
+bash<br>
+Copy code<br>
+git clone https://github.com/Pillbug23/cs361_fitness_tracker.git<br>
+cd cs361_fitness_tracker<br>
+
+# Install Dependencies:
 
 For the frontend:
 bash
@@ -39,34 +41,32 @@ cd server
 npm install
 Set Up Environment Variables:
 
-Create a .env file in the root of the server and add the necessary environment variables:
-bash
-Copy code
-AUTH0_DOMAIN=your-auth0-domain
-AUTH0_CLIENT_ID=your-auth0-client-id
-AUTH0_CLIENT_SECRET=your-auth0-client-secret
-MYSQL_HOST=your-mysql-host
-MYSQL_USER=your-mysql-user
-MYSQL_PASSWORD=your-mysql-password
-MYSQL_DATABASE=your-mysql-database
-Start the Application:
+# Create a .env file in the root of the server and add the necessary environment variables:
+bash<br>
+Copy code<br>
+AUTH0_DOMAIN=your-auth0-domain<br>
+AUTH0_CLIENT_ID=your-auth0-client-id<br>
+AUTH0_CLIENT_SECRET=your-auth0-client-secret<br>
+MYSQL_HOST=your-mysql-host<br>
+MYSQL_USER=your-mysql-user<br>
+MYSQL_PASSWORD=your-mysql-password<br>
+MYSQL_DATABASE=your-mysql-database<br>
+Start the Application:<br>
 
-Start the backend server:
-bash
-Copy code
-cd server
-npm start
-Start the frontend:
-bash
-Copy code
-cd client
-npm start
-Access the Application:
+# Start the backend server:
+bash<br>
+Copy code<br>
+cd server<br>
+npm start<br>
+
+# Start the frontend:
+bash<br>
+Copy code<br>
+cd client<br>
+npm start<br>
+Access the Application:<br>
 
 Open your browser and go to http://localhost:3000 to access the application.
-Usage
-Sign Up: Create an account using Auth0 to start tracking your fitness journey.
-Log Entries: Input your daily food, exercise, and water intake.
-Visualize Data: Use the integrated charts to see your progress and make informed decisions about your fitness goals.
+
 
 
