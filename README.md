@@ -4,14 +4,14 @@ Fitness Tracker Application
 Overview
 This project is a full-stack fitness tracking application that allows users to monitor their calorie intake, exercise routines, water consumption, and weight changes over time. The application provides a comprehensive solution for users looking to manage and achieve their fitness goals effectively.
 
-Features
-Calorie Tracking: Log daily calorie intake through food entries and track progress over time.
-Exercise Logging: Keep a detailed record of exercises performed and calories burned.
-Water Intake Monitoring: Track daily water consumption to ensure adequate hydration.
-Weight Tracking: Chart and visualize weight changes to monitor progress towards fitness goals.
-User Authentication: Secure user authentication using Auth0.
-Data Visualization: Integrated Google Charts to provide visual insights into calorie and weight trends.
-Microservices Architecture: The application is designed using microservices to ensure scalability and ease of maintenance.
+# Features
+Calorie Tracking: Log daily calorie intake through food entries and track progress over time.<br>
+Exercise Logging: Keep a detailed record of exercises performed and calories burned.<br>
+Water Intake Monitoring: Track daily water consumption to ensure adequate hydration.<br>
+Weight Tracking: Chart and visualize weight changes to monitor progress towards fitness goals.<br>
+User Authentication: Secure user authentication using Auth0.<br>
+Data Visualization: Integrated Google Charts to provide visual insights into calorie and weight trends.<br>
+Microservices Architecture: The application is designed using microservices to ensure scalability and ease of maintenance.<br>
 
 Frontend: React, Bootstrap
 Backend: Node.js, Express
