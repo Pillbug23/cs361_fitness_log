@@ -4,7 +4,12 @@ Fitness Tracker Application
 Overview
 This project is a full-stack fitness tracking application that allows users to monitor their calorie intake, exercise routines, water consumption, and weight changes over time. The application provides a comprehensive solution for users looking to manage and achieve their fitness goals effectively.
 
-<iframe id="kaltura_player" src='https://cdnapisec.kaltura.com/p/391241/embedPlaykitJs/uiconf_id/44855082?iframeembed=true&entry_id=1_vq2qxnm8&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_ahn26a1f%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D' style="width: 640px;height: 420px;border: 0;" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" title="Kaltura Capture recording - May 27th 2024, 4:21:02 pm"></iframe>
+<iframe id="kaltura_player" src='' style="width: 640px;height: 420px;border: 0;" allowfullscreen webkitallowfullscreen mozAllowFullScreen allow="autoplay *; fullscreen *; encrypted-media *" sandbox="allow-downloads allow-forms allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation-by-user-activation" title="Kaltura Capture recording - May 27th 2024, 4:21:02 pm"></iframe>
+
+<video width="640" height="420" controls>
+    <source src="[https://path_to_your_video.mp4](https://cdnapisec.kaltura.com/p/391241/embedPlaykitJs/uiconf_id/44855082?iframeembed=true&entry_id=1_vq2qxnm8&config%5Bprovider%5D=%7B%22widgetId%22%3A%221_ahn26a1f%22%7D&config%5Bplayback%5D=%7B%22startTime%22%3A0%7D)" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
 
 # Features
 Calorie Tracking: Log daily calorie intake through food entries and track progress over time.<br>
