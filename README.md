@@ -29,44 +29,37 @@ The **Fitness Tracker Application** is a full-stack solution designed to empower
 ## 🚀 Setup and Installation
 
 ### Clone the Repository:
-git clone https://github.com/Pillbug23/cs361_fitness_tracker.git  
-cd cs361_fitness_tracker  
-Install Dependencies:  
+git clone https://github.com/Pillbug23/cs361_fitness_tracker.git  <br>
+cd cs361_fitness_tracker  <br>
+Install Dependencies:  <br>
 
-For the Frontend:  
+For the Frontend:  <br>
+cd client<br>
+npm install<br>
 
-bash
-Copy code
-cd client
-npm install
-For the Backend:
-bash
-Copy code
-cd server
-npm install
-Set Up Environment Variables:
-Create a .env file in the root of the server and add the necessary environment variables:
+For the Backend:<br>
+cd server<br>
+npm install<br>
 
-bash
-Copy code
-AUTH0_DOMAIN=your-auth0-domain
-AUTH0_CLIENT_ID=your-auth0-client-id
-AUTH0_CLIENT_SECRET=your-auth0-client-secret
-MYSQL_HOST=your-mysql-host
-MYSQL_USER=your-mysql-user
-MYSQL_PASSWORD=your-mysql-password
-MYSQL_DATABASE=your-mysql-database
-Start the Application:
-Start the Backend Server:
-bash
-Copy code
-cd server
-npm start
-Start the Frontend:
-bash
-Copy code
-cd client
-npm start
-Access the Application:
-Open your browser and navigate to http://localhost:3000 to access the application.
+Set Up Environment Variables:<br>
+Create a .env file in the root of the server and add the necessary environment variables:<br>
+AUTH0_DOMAIN=your-auth0-domain<br>
+AUTH0_CLIENT_ID=your-auth0-client-id<br>
+AUTH0_CLIENT_SECRET=your-auth0-client-secret<br>
+MYSQL_HOST=your-mysql-host<br>
+MYSQL_USER=your-mysql-user<br>
+MYSQL_PASSWORD=your-mysql-password<br>
+MYSQL_DATABASE=your-mysql-database<br>
+
+Start the Application:<br>
+Start the Backend Server:<br>
+cd server<br>
+npm start<br>
+
+Start the Frontend:<br>
+cd client<br>
+npm start<br>
+
+Access the Application:<br>
+Open your browser and navigate to http://localhost:3000 to access the application.<br>
 
