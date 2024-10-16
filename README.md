@@ -29,11 +29,12 @@ The **Fitness Tracker Application** is a full-stack solution designed to empower
 ## 🚀 Setup and Installation
 
 ### Clone the Repository:
-bash
-git clone https://github.com/Pillbug23/cs361_fitness_tracker.git
-cd cs361_fitness_tracker
-Install Dependencies:
-For the Frontend:
+git clone https://github.com/Pillbug23/cs361_fitness_tracker.git  
+cd cs361_fitness_tracker  
+Install Dependencies:  
+
+For the Frontend:  
+
 bash
 Copy code
 cd client
