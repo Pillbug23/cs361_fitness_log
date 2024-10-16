@@ -29,16 +29,17 @@ cd cs361_fitness_tracker<br>
 
 # Install Dependencies:
 
-For the frontend:
-bash
-Copy code
-cd client
-npm install
-For the backend:
-bash
-Copy code
-cd server
-npm install
+For the frontend:<br>
+bash<br>
+Copy code<br>
+cd client<br>
+npm install<br>
+<br>
+For the backend:<br>
+bash<br>
+Copy code<br>
+cd server<br>
+npm install<br>
 Set Up Environment Variables:
 
 # Create a .env file in the root of the server and add the necessary environment variables:
