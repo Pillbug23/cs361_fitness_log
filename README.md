@@ -1,4 +1,4 @@
-# 🏋️‍♂️ CS361 Fitness Tracker
+# 🏋️‍♂️ CS361 Fitness Log
 
 ## Overview
 The **Fitness Tracker Application** is a full-stack solution designed to empower users to monitor their **calorie intake**, **exercise routines**, **water consumption**, and **weight changes** over time. With a user-friendly interface and robust features, this application provides an effective way for individuals to manage and achieve their fitness goals.
