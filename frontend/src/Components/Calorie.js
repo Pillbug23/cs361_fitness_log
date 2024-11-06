@@ -224,6 +224,13 @@ function Calorie() {
                     fiber: '',
                     fat: ''
                 })
+                fetch('http://localhost:9825/calorie')
+                    .then(response => response.json())
+                    .then(data => {
+                        setCalorieData(data)
+                        totalCalories(data)
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
             }
         } catch (error) {
             console.error('Could not add login', error);
@@ -263,12 +270,6 @@ function Calorie() {
                 const data = await response.json()
                 setSearchExercise(data)
             }
-            fetch('http://localhost:9825/calorie')
-                    .then(response => response.json())
-                    .then(data => {
-                        setCalorieData(data)
-                    })
-                    .catch(error => console.error('Error fetching data:', error));
         } catch (error) {
             console.error('Could not add login', error);
         }
@@ -376,7 +377,7 @@ function Calorie() {
             <Container fluid className="basic-info" id="signup">
                 <Container className="content">
                     <Row>
-                        <Col md={4} >
+                        <Col md={6} >
                             <h1 className="calorie-logo">Calculate Calories</h1>
                             <div className="progress-bar">
                                 <CircularProgressbar maxValue={goal} value={final} text={`${final}`} />

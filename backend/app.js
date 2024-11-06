@@ -4,17 +4,19 @@ SETUP
 var mysql = require('mysql')
 
 const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: 'classmysql.engr.oregonstate.edu',
-    user: 'cs361_lyp',
-    password: '1250',
-    database: 'cs361_lyp'
+    connectionLimit : 10,
+    host            : process.env.DB_HOST,
+    user            : process.env.DB_USER,
+    password        : process.env.DB_PASSWORD,
+    database        : process.env.DB_NAME
 });
 
 var express = require('express');   // We are using the express library for the web server
+require('dotenv').config();    // Hide database credientials
 var app = express();            // We need to instantiate an express object to interact with the server in our code
-PORT = 6662;                 // Set a port number at the top so it's easy to change in the future
-
+PORT = 9825;   
+              // Set a port number at the top so it's easy to change in the future
+console.log(process.env.DB_HOST)
 // Handlebars
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -61,7 +63,7 @@ app.post('/signin', (req, res) => {
             res.status(500).send('Error fetching data');
             return;
         }
-
+        console.log("Successfully retrieved the login credientials")
         res.json(results);
     });
 });
@@ -91,6 +93,20 @@ app.get('/calorie', (req, res) => {
         res.json(results);
     });
 });
+
+// Gets water amount data
+app.get('/water', (req, res) => {
+    const query = 'SELECT * FROM Waters';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error fetching data');
+            return;
+        }
+        res.json(results);
+    });
+});
+
 
 app.get('/calorie', (req, res) => {
     const query = 'SELECT * FROM Calories';
@@ -208,16 +224,16 @@ app.post("/weight", (req, res) => {
             res.status(500).send('Error executing query');
             return;
         }
-        console.log('Login added successfully');
-        res.status(200).json({ message: 'Login added successfully' });
+        console.log('Weight added successfully');
+        res.status(200).json({ message: 'Weight added successfully' });
     });
 });
 
 // Add a food item
 app.post("/calorie", (req, res) => {
-    const {calorieID, name, calorie} = req.body;
-    const q = `INSERT INTO Calories (calorieID, name, calorie) VALUES (?, ?, ?)`;
-    const values = [calorieID, name, calorie];
+    const {calorieID, name, calorie, protein, fiber, fat} = req.body;
+    const q = `INSERT INTO Calories (calorieID, name, calorie, protein, fiber, fat) VALUES (?, ?, ?, ?, ?, ?)`;
+    const values = [calorieID, name, calorie, protein, fiber, fat];
 
     pool.query(q, values, (err) => {
         if (err) {
@@ -244,6 +260,23 @@ app.post("/exercise", (req, res) => {
         }
         console.log('Exercise added successfully');
         res.status(200).json({ message: 'Exercise added successfully' });
+    });
+});
+
+// Add a water amount
+app.post("/water", (req, res) => {
+    const {cupID, cup} = req.body;
+    const q = `INSERT INTO Waters (cupID, cup) VALUES (?, ?)`;
+    const values = [cupID, cup];
+
+    pool.query(q, values, (err) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error executing query');
+            return;
+        }
+        console.log('Cup amount added successfully');
+        res.status(200).json({ message: 'Water added successfully' });
     });
 });
 
@@ -282,6 +315,19 @@ app.delete("/delete-weights", (req, res) => {
         res.send('All entries deleted successfully');
     });
 });
+
+app.delete("/delete-water", (req, res) => {
+    const sql = 'DELETE FROM Waters';
+    pool.query(sql, (error) => {
+        if (error) {
+            res.status(500).send('Error deleting entries')
+            return;
+        }
+        res.send('All entries deleted successfully');
+    });
+});
+
+
 
 /*
     LISTENER
