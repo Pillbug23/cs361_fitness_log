@@ -1,7 +1,8 @@
 /*
 SETUP
 */
-var mysql = require('mysql')
+require('dotenv').config();    // Hide database credientials
+var mysql = require('mysql2')
 
 const pool = mysql.createPool({
     connectionLimit : 10,
@@ -12,7 +13,7 @@ const pool = mysql.createPool({
 });
 
 var express = require('express');   // We are using the express library for the web server
-require('dotenv').config();    // Hide database credientials
+
 var app = express();            // We need to instantiate an express object to interact with the server in our code
 PORT = 9825;   
               // Set a port number at the top so it's easy to change in the future

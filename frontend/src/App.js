@@ -7,9 +7,9 @@ import Homepage from './Components/Homepage.js';
 import Navigation from './Components/Navigation.js';
 import SignUp from './Components/SignUp.js';
 import Calorie from './Components/Calorie.js';
-import Weight from './Components/Weight.js';
+import Weight from './Components/Weight.tsx';
 import Signin from './Components/Signin.js';
-import Water from './Components/Water.js';
+import Water from './Components/Water.tsx';
 
 
 /*Import bootstrap styles */
